@@ -1,6 +1,6 @@
 # polymwk
 
-Clean, **pip-installable** Python helpers around Polymarket’s public APIs: events and markets, user profiles and positions, leaderboards, tags, order books, and optional live feed wiring.
+Clean, **pip-installable** Python API around Polymarket’s 3/4 MESSY public APIs: events and markets, user profiles and positions, leaderboards, tags, order books, and live feed wiring.
 
 **Python:** 3.12+
 
@@ -12,23 +12,13 @@ Clean, **pip-installable** Python helpers around Polymarket’s public APIs: eve
 
 ## Install
 
-From the project root (editable while you develop):
+
+
+git clone or just pip install:
 
 ```bash
-pip install -e .
+uv add polymwk / pip install polymwk 
 ```
-
-Or from a built wheel / index once published:
-
-```bash
-pip install polymwk
-```
-
-Dependencies are declared in `pyproject.toml` (notably `polymarket-apis`, `httpx`, `truststore`, `pydantic`, `polars`, `plotille`).
-
-### TLS on Windows
-
-The package enables [`truststore`](https://pypi.org/project/truststore/) so HTTPS can use the **same OS certificate store** as your browser. If you still see TLS errors (for example hostname mismatch behind aggressive HTTPS scanning), fix or exempt Polymarket in that tool, or point `SSL_CERT_FILE` at a PEM bundle your environment trusts.
 
 ---
 
@@ -39,26 +29,7 @@ The package enables [`truststore`](https://pypi.org/project/truststore/) so HTTP
 Search events, then inspect a market: positions, prices, rules, and resolution.
 
 ```python
-from polymwk import (
-    displayEventComments,
-    displayEvents,
-    displayMarketLastActivity,
-    displayMarketPrices,
-    displayMarketResolution,
-    displayMarketRules,
-    displayMarketTopHolders,
-    displayMarketUsersPositions,
-    displayOrderBook,
-    fetchEventComments,
-    fetchEventPrices,
-    fetchEventResolution,
-    fetchEventRules,
-    fetchEvents,
-    fetchMarketLastActivity,
-    fetchMarketTopHolders,
-    fetchMarketUsersPositions,
-    fetchOrderBook,
-)
+from polymwk import *
 
 # Fetch events (Gamma search-style query)
 events = fetchEvents(query="bitcoin", limit=5, status="active")
@@ -105,20 +76,7 @@ displayMarketResolution(resolution)
 Use a **proxy wallet** `0x…` or a **handle** (`reflex102` / `@reflex102`). Functions resolve handles via Gamma where needed.
 
 ```python
-from polymwk import (
-    displayUserActivity,
-    displayUserInfo,
-    displayUserLeaderboardRank,
-    displayUserPositions,
-    displayUserTrades,
-    displayUsersLeaderboard,
-    fetchUserActivity,
-    fetchUserInfo,
-    fetchUserLeaderboardRank,
-    fetchUserPositions,
-    fetchUserTrades,
-    fetchUsersLeaderboard,
-)
+from polymwk import *
 
 # Example profile: https://polymarket.com/@reflex102
 user = "0x61270a2fbd3b5d4ef8d2c23cb8b6fb4df3bfd154"
@@ -153,7 +111,7 @@ displayUsersLeaderboard(board)
 ### Tags (site-style categories)
 
 ```python
-from polymwk import displayTags, fetchTags
+from polymwk import *
 
 displayTags(fetchTags())
 ```
@@ -178,18 +136,7 @@ displayEvents(events, tags="bitcoin", show_markets=True)
 Uncomment and adapt when you want slug- or id-based fetches and the live ladder.
 
 ```python
-from polymwk import (
-    displayEvent,
-    displayEvents,
-    displayLiveOrderBook,
-    displayMarket,
-    displaySerie,
-    displaySeries,
-    fetchEvent,
-    fetchMarket,
-    fetchSerie,
-    fetchSeries,
-)
+from polymwk import *
 
 # series = fetchSeries(query="bitcoin", limit=50, status="active")
 # displaySeries(series, tags="bitcoin")
@@ -212,21 +159,18 @@ from polymwk import (
 # )
 ```
 
-### Feed (WebSocket order book)
+### Feed (WebSocket order book) {NOT YET FULLY IMPLEMENTED....}
 
 `subscribeMarketOrderBook` streams CLOB updates for one outcome `token_id` and **blocks** until the socket ends. For a full terminal ladder that redraws on each update, use `displayLiveOrderBook` (see the commented block under **Series, single event, market, live order book**).
 
 ```python
 from polymwk import subscribeMarketOrderBook
 
-def on_tick(update):
-    print(update)
-
-# subscribeMarketOrderBook(
-#     token_id,
-#     market_slug="optional-slug",
-#     on_best_bid_ask=on_tick,
-# )
+subscribeMarketOrderBook(
+     token_id,
+     market_slug="optional-slug",
+     on_best_bid_ask=on_tick,
+)
 ```
 
 ---
@@ -236,6 +180,12 @@ def on_tick(update):
 ```bash
 pip install pytest
 pytest
+```
+
+## CLI Support soon too!
+
+```bash
+polymwk runTests
 ```
 
 (`pyproject.toml` also lists dev tools under `[dependency-groups]` for installers that support dependency groups, for example `uv sync --group dev`.)

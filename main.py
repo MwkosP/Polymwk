@@ -1,5 +1,4 @@
-from polymwk import displayUserInfo, fetchUserInfo, fetchUserPositions, displayUserPositions,fetchUserActivity, displayUserActivity,fetchUserTrades, displayUserTrades,fetchUserLeaderboardRank, displayUserLeaderboardRank,fetchUsersLeaderboard, displayUsersLeaderboard
-
+from polymwk import *
 # Session Polymarket user — https://polymarket.com/@reflex102
 user = "0x61270a2fbd3b5d4ef8d2c23cb8b6fb4df3bfd154"   #0xb39ed64a8c85e93f726b669a750ae34bb18ccd5f   0x61270a2fbd3b5d4ef8d2c23cb8b6fb4df3bfd154  0x1820cd0869ab9479dc14455db55dd35c60b42aa0   0x44356793d11ace7e5f8f36b0d12ed0758c840c4b   0xefbc5fec8d7b0acdc8911bdd9a98d6964308f9a2
 
