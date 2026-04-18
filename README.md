@@ -1,4 +1,4 @@
-# polymwk
+# Polymwk
 
 Clean, **pip-installable** Python API around Polymarket’s 3/4 MESSY public APIs: events and markets, user profiles and positions, leaderboards, tags, order books, and live feed wiring.
 
@@ -14,7 +14,8 @@ Clean, **pip-installable** Python API around Polymarket’s 3/4 MESSY public API
 
 
 
-git clone or just pip install:
+you can git clone 
+or just pip install as a library:
 
 ```bash
 uv add polymwk / pip install polymwk 
@@ -34,41 +35,39 @@ from polymwk import *
 # Fetch events (Gamma search-style query)
 events = fetchEvents(query="bitcoin", limit=5, status="active")
 first_market = events[0].markets[0]
-
-# Optional: tabular event list with tag highlighting
-# displayEvents(events, tags="nvda", show_markets=True)
+displayEvents(events, tags="nvda", show_markets=True)
 
 # REST order book for one outcome token
-# book = fetchOrderBook(first_market.yes_token_id, market_slug=first_market.slug)
-# displayOrderBook(book, event_slug=events[0].slug, market_question=first_market.question)
+book = fetchOrderBook(first_market.yes_token_id, market_slug=first_market.slug)
+displayOrderBook(book, event_slug=events[0].slug, market_question=first_market.question)
 
-# Market top holders (whales)
-# holders = fetchMarketTopHolders(first_market, event_slug=events[0].slug)
-# displayMarketTopHolders(holders)
+# Market top holders 
+holders = fetchMarketTopHolders(first_market, event_slug=events[0].slug)
+displayMarketTopHolders(holders)
 
-users_positions = fetchMarketUsersPositions(
-    first_market, event_slug=events[0].slug, limit=15
-)
+# User Positions
+users_positions = fetchMarketUsersPositions(first_market, event_slug=events[0].slug, limit=15)
 displayMarketUsersPositions(users_positions)
 
+# Event's Prices
 price_chart = fetchEventPrices(events[0], interval="max")
 displayMarketPrices(price_chart)
 
+# Event/Market Rules
 rules = fetchEventRules(events[0])
 displayMarketRules(rules)
 
+#Event/Market Resolution Info
 resolution = fetchEventResolution(events[0])
 displayMarketResolution(resolution)
 
 # Recent fills / activity on a market
-# last_activity = fetchMarketLastActivity(
-#     first_market, event_slug=events[0].slug, limit=12
-# )
-# displayMarketLastActivity(last_activity)
+last_activity = fetchMarketLastActivity(first_market, event_slug=events[0].slug, limit=12)
+displayMarketLastActivity(last_activity)
 
 # Threaded comments on the event page
-# event_comments = fetchEventComments(events[0], limit=8)
-# displayEventComments(event_comments)
+event_comments = fetchEventComments(events[0], limit=8)
+displayEventComments(event_comments)
 ```
 
 ### Users
@@ -81,30 +80,32 @@ from polymwk import *
 # Example profile: https://polymarket.com/@reflex102
 user = "0x61270a2fbd3b5d4ef8d2c23cb8b6fb4df3bfd154"
 
+# User's Profile Info
 session_user = fetchUserInfo(user)
 displayUserInfo(session_user)
 
-open_ = fetchUserPositions(user, limit=50, status="active")
+# User's Positions (open/closed)
+open = fetchUserPositions(user, limit=50, status="active")
 closed = fetchUserPositions(user, limit=200, status="closed")
-displayUserPositions(open_, status="active")
+displayUserPositions(open, status="active")
 displayUserPositions(closed, status="closed")
 
+# User's Activity (fills buys etc)
 act = fetchUserActivity(user, limit=100, offset=0)
 displayUserActivity(act)
 
+# Limit/market buy sell orders
 trades_taker = fetchUserTrades(user, limit=50, offset=0, taker_only=False)
 trades_maker = fetchUserTrades(user, limit=50, offset=0, taker_only=True)
 displayUserTrades(trades_taker)
 displayUserTrades(trades_maker)
 
-lb = fetchUserLeaderboardRank(
-    user, metric="profit", window="all", include_cross_metric=True
-)
+# User's Leaderboard Ranking
+lb = fetchUserLeaderboardRank(user, metric="profit", window="all", include_cross_metric=True)
 displayUserLeaderboardRank(lb)
 
-board = fetchUsersLeaderboard(
-    timeframe="weekly", category="all", order_by="pnl", limit=25
-)
+# General Leaderboard for any category you wish
+board = fetchUsersLeaderboard(timeframe="weekly", category="all", order_by="pnl", limit=25)
 displayUsersLeaderboard(board)
 ```
 
@@ -113,6 +114,7 @@ displayUsersLeaderboard(board)
 ```python
 from polymwk import *
 
+#i have some prebuilt tags for you to discover markets with them. feel free to change them
 displayTags(fetchTags())
 ```
 
